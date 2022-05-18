@@ -41,6 +41,7 @@ _start_args = {
     'port':             8000,                       # Port used for Bottle server (use 0 for auto)
     'block':            True,                       # Whether start() blocks calling thread
     'jinja_templates':  None,                       # Folder for jinja2 templates
+    'jinja_kwargs':     {},                         # Keyword arguments to pass to the jinja2 template
     'cmdline_args':     ['--disable-http-cache'],   # Extra cmdline flags to pass to browser start
     'size':             None,                       # (width, height) of main window
     'position':         None,                       # (left, top) of main window
@@ -223,7 +224,7 @@ def _static(path):
         if path.startswith(template_prefix):
             n = len(template_prefix)
             template = _start_args['jinja_env'].get_template(path[n:])
-            response = btl.HTTPResponse(template.render())
+            response = btl.HTTPResponse(template.render(**_start_args['jinja_kwargs']))
 
     if response is None:
         response = btl.static_file(path, root=root_path)
